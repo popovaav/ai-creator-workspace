@@ -58,7 +58,7 @@ export async function signIn(values: SignInValues): Promise<ActionResult> {
     return { error: friendlyError(error) };
   }
 
-  redirect("/dashboard");
+  redirect("/");
 }
 
 export async function signUp(values: SignUpValues): Promise<ActionResult> {
@@ -85,7 +85,7 @@ export async function signUp(values: SignUpValues): Promise<ActionResult> {
     );
   }
 
-  redirect("/dashboard");
+  redirect("/");
 }
 
 export async function signOut() {

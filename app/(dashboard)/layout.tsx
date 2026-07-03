@@ -1,6 +1,8 @@
 import type { ReactNode } from "react";
 import { redirect } from "next/navigation";
+
 import { createClient } from "@/lib/supabase/server";
+import { DashboardShell } from "@/components/dashboard-shell";
 
 export default async function DashboardLayout({
   children,
@@ -16,5 +18,5 @@ export default async function DashboardLayout({
     redirect("/sign-in");
   }
 
-  return <>{children}</>;
+  return <DashboardShell user={user}>{children}</DashboardShell>;
 }

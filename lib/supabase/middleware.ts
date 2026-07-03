@@ -2,7 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 const AUTH_ROUTES = ["/sign-in", "/sign-up"];
-const PROTECTED_ROUTES = ["/dashboard", "/clients", "/projects"];
+const PROTECTED_ROUTES = ["/clients", "/projects"];
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
@@ -39,7 +39,8 @@ export async function updateSession(request: NextRequest) {
   const matchesRoute = (route: string) =>
     pathname === route || pathname.startsWith(`${route}/`);
   const isAuthRoute = AUTH_ROUTES.some(matchesRoute);
-  const isProtectedRoute = PROTECTED_ROUTES.some(matchesRoute);
+  const isProtectedRoute =
+    pathname === "/" || PROTECTED_ROUTES.some(matchesRoute);
 
   if (!user && isProtectedRoute) {
     const url = request.nextUrl.clone();
@@ -49,7 +50,7 @@ export async function updateSession(request: NextRequest) {
 
   if (user && isAuthRoute) {
     const url = request.nextUrl.clone();
-    url.pathname = "/dashboard";
+    url.pathname = "/";
     return NextResponse.redirect(url);
   }
 
