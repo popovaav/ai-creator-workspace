@@ -13,11 +13,13 @@ import {
 import { Button } from "@/components/ui/button";
 import { AuthFormField } from "@/components/auth/form-field";
 import { signInSchema, type SignInValues } from "@/lib/validations/auth";
+import { signIn } from "@/app/(auth)/actions";
 
 export default function SignInPage() {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors, isSubmitting, isValid },
   } = useForm<SignInValues>({
     resolver: zodResolver(signInSchema),
@@ -25,8 +27,10 @@ export default function SignInPage() {
   });
 
   async function onSubmit(values: SignInValues) {
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    console.log("Sign in values:", values);
+    const result = await signIn(values);
+    if (result?.error) {
+      setError("root", { message: result.error });
+    }
   }
 
   return (
@@ -66,6 +70,12 @@ export default function SignInPage() {
               error={errors.password?.message}
               {...register("password")}
             />
+
+            {errors.root && (
+              <p role="alert" className="text-[13px] text-destructive">
+                {errors.root.message}
+              </p>
+            )}
 
             <Button
               type="submit"
